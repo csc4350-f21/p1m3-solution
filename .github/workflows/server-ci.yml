@@ -39,7 +39,7 @@ jobs:
         run: pip install pylint
         
       - name: Lint files
-        run: find . -name '*.py' -exec pylint {}
+        run: find . -name '*.py' -exec pylint {} \;
         
       - name: Run tests
         run: python -m unittest
