@@ -6,9 +6,9 @@ name: Python Server CI
 on:
   # Triggers the workflow on push or pull request events but only for the ci-demo branch
   push:
-    branches: [ ci-demo ]
+    branches: [ main ]
   pull_request:
-    branches: [ ci-demo ]
+    branches: [ main ]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -27,9 +27,7 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
-
-      - name: Set up Python
-        uses: actions/setup-python@v2
+      - uses: actions/setup-python@v2
         with:
           python-version: ${{ matrix.python-version }}
           architecture: x64
@@ -37,8 +35,11 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt 
         
+      - name: Install linter
+        run: pip install pylint
+        
       - name: Lint files
-        run: pylint **/*.py
+        run: find . -name '*.py' -exec pylint {} \;
         
       - name: Run tests
         run: python -m unittest
