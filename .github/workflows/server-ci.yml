@@ -35,6 +35,9 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt 
         
+      - name: Install linter
+        run: pip install pylint
+        
       - name: Lint files
         run: pylint **/*.py
         
