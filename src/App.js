@@ -1,4 +1,3 @@
-import logo from './logo.svg';
 import './App.css';
 import React, { useState, useRef } from 'react';
 
@@ -73,7 +72,7 @@ function App() {
           <h2>{args.song_name}</h2>
           <h3>{args.song_artist}</h3>
           <div>
-            <img src={args.song_image_url} width={300} height={300} />
+            <img alt="" src={args.song_image_url} width={300} height={300} />
           </div>
           <div>
             <audio controls>
