@@ -3,7 +3,11 @@ import React, { useState, useRef } from 'react';
 
 
 function App() {
-  const args = JSON.parse(document.getElementById("data").text);
+  const args = (document.getElementById("data") == null) ? ({
+    "artist_ids": [],
+    "username": "John",
+    "has_artists_saved": false,
+  }) : JSON.parse(document.getElementById("data").text);
   const [artists, updateArtists] = useState(args.artist_ids);
   const form = useRef(null);
 
@@ -80,14 +84,15 @@ function App() {
             </audio>
           </div>
           <a href={args.genius_url}> Click here to see lyrics! </a>
-          <h1>Your saved artists:</h1>
-          {artists_list}
+
         </>
       ) : (
         <h2>Looks like you don't have anything saved! Use the form below!</h2>
       )}
+      <h1>Your saved artists:</h1>
+      {artists_list}
       <h1>Save a favorite artist ID for later:</h1>
-      <input type="text" ref={form}></input>
+      <input type="text" ref={form} data-testid="text_input"></input>
       <button onClick={onClickAdd}>Add Artist</button>
       <button onClick={onClickSave}>Save</button>
     </div>
