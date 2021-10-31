@@ -163,7 +163,6 @@ def login_post():
 @app.route("/save", methods=["POST"])
 def save():
     artist_ids = flask.request.json.get("artist_ids")
-    print(flask.request.json)
     valid_ids = set()
     for artist_id in artist_ids:
         try:
@@ -174,20 +173,24 @@ def save():
             pass
 
     username = current_user.username
+
+    response = {"artist_ids": [a for a in artist_ids if a in valid_ids]}
+    return flask.jsonify(response)
+
+
+def update_db_ids_for_user(username, valid_ids):
     existing_ids = {
         v.artist_id for v in Artist.query.filter_by(username=username).all()
     }
     new_ids = valid_ids - existing_ids
     for new_id in new_ids:
         db.session.add(Artist(artist_id=new_id, username=username))
-    for artist in Artist.query.filter_by(username=username).filter(
-        Artist.artist_id.notin_(valid_ids)
-    ):
-        db.session.delete(artist)
+    if len(existing_ids - valid_ids) > 0:
+        for artist in Artist.query.filter_by(username=username).filter(
+            Artist.artist_id.notin_(valid_ids)
+        ):
+            db.session.delete(artist)
     db.session.commit()
-
-    response = {"artist_ids": [a for a in artist_ids if a in valid_ids]}
-    return flask.jsonify(response)
 
 
 @app.route("/")
@@ -197,7 +200,8 @@ def main():
     return flask.redirect(flask.url_for("login"))
 
 
-app.run(
-    host=os.getenv("IP", "0.0.0.0"),
-    port=int(os.getenv("PORT", 8081)),
-)
+if __name__ == "__main__":
+    app.run(
+        host=os.getenv("IP", "0.0.0.0"),
+        port=int(os.getenv("PORT", 8081)),
+    )
