@@ -2,14 +2,11 @@ import './App.css';
 import React, { useState, useRef } from 'react';
 
 function App() {
-  const args =
-    document.getElementById('data') == null
-      ? {
-          artist_ids: [],
-          username: 'John',
-          has_artists_saved: false,
-        }
-      : JSON.parse(document.getElementById('data').text);
+  const args = (document.getElementById('data') == null) ? ({
+    artist_ids: [],
+    username: 'John',
+    has_artists_saved: false,
+  }) : JSON.parse(document.getElementById('data').text);
   const [artists, updateArtists] = useState(args.artist_ids);
   const form = useRef(null);
 
@@ -63,9 +60,7 @@ function App() {
   const artistsList = artists.map((artistID, i) => (
     <div style={gridStyle}>
       <p>{artistID}</p>
-      <button type="button" style={deleteButtonStyle} onClick={() => onClickDelete(i)}>
-        Delete
-      </button>
+      <button type="button" style={deleteButtonStyle} onClick={() => onClickDelete(i)}>Delete</button>
     </div>
   ));
 
@@ -88,6 +83,7 @@ function App() {
             </audio>
           </div>
           <a href={args.genius_url}> Click here to see lyrics! </a>
+
         </>
       ) : (
         <h2>Looks like you don&apos;t have anything saved! Use the form below!</h2>
@@ -96,12 +92,8 @@ function App() {
       {artistsList}
       <h1>Save a favorite artist ID for later:</h1>
       <input type="text" ref={form} data-testid="text_input" />
-      <button type="button" onClick={onClickAdd}>
-        Add Artist
-      </button>
-      <button type="button" onClick={onClickSave}>
-        Save
-      </button>
+      <button type="button" onClick={onClickAdd}>Add Artist</button>
+      <button type="button" onClick={onClickSave}>Save</button>
     </div>
   );
 }
