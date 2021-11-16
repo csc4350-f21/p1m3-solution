@@ -72,7 +72,8 @@ class Artist(db.Model):
         return f"<Artist {self.artist_id}>"
 
 
-db.create_all()
+if os.getenv("DATABASE_URL") is not None:  # so our unit tests run in GitHub
+    db.create_all()
 login_manager = LoginManager()
 login_manager.login_view = "login"
 login_manager.init_app(app)
